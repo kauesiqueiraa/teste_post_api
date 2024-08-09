@@ -3,7 +3,7 @@
 
 // const axios = require('axios');
 
-const url = 'http://vagas.grupotecnotextil.com:9002/rest/ZWS_SQG';
+const url = '/proxy';
 
 async function testApi(formData) {
   try {
