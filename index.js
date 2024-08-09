@@ -1,37 +1,66 @@
-const express = require('express');
-const axios = require('axios');
-const bodyParser = require('body-parser');
-const e = require('express');
 
-const app = express();
-const port = process.env.PORT || 3000;
+// import axios from 'axios';
 
-app.use(bodyParser.json());
+// const axios = require('axios');
 
-app.post('/post',async (req, res) => {
-    const formData = req.body;
+const url = 'http://vagas.grupotecnotextil.com:9002/rest/ZWS_SQG';
 
-    const url = 'http://vagas.grupotecnotextil.com:9002/rest/ZWS_SQG';
+async function testApi(formData) {
+  try {
+    const response = await axios.post(url, formData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
 
-    try {
-        const response = await axios.post(url, formData, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }
-    );
-    res.status(200).json({ message: "Dados enviados a API do Protheus", data: response.data });
-    } catch (error) {
-        if (error.response) {
-            res.status(error.response.status).json({ message: error.response.statusText, details: error.response.data });
-        } else if (error.request) {
-            res.status(500).json({ message: 'Sem responsta recebida da API do Protheus', details: error.request });
-        } else {
-            res.status(500).json({ message: error.message });
-        }
+    console.log('Response:', response.data);
+    alert('Formulario enviado com sucesso!');
+  } catch (error) {
+    if (error.response) {
+      console.error(`HTTP Error: ${error.response.status} - ${error.response.statusText}`);
+      console.error(`Error Details: ${error.response.data}`);
+      alert('Erro ao enviar o formulário. Verifique os dados e tente novamente.');
+    } else if (error.request) {
+      console.error('No response received:', error.request);
+      alert('Erro de comunicação com o servidor.');
+    } else {
+      console.error('Error:', error.message);
+      alert('Erro ao configurar a solicitação.');
     }
-});
+  }
+}
 
-app.listen(port, () => {
-    console.log(`API rodando na porta ${port}`);
+document.getElementById('submit').addEventListener('click', function() {
+  const name = document.getElementById('name').value;
+
+  const formData = {
+    nome: name,
+    end: "RUA TESTE 152",
+    compl: "CASA",
+    bairro: "CENTRO",
+    cidade: "TRES PONTAS",
+    uf: "MG",
+    cep: "37190000",
+    fone: "3532659100",
+    rg: "MG14454995",
+    cic: "08947874843",
+    sexo: "M",
+    estciv: "C",
+    dtnasc: "19880516",
+    dtcad: "20240808",
+    pretsal: 15000,
+    situac: "001",
+    email: "francisco.mudrik@tecnotextil.net",
+    cargo: "TI",
+    indicacao: "",
+    redacao: "SEM COMENTARIOS",
+    declexm: "1",
+    decok: "Ok",
+    pai: "",
+    mae: "",
+    qtdfilho: 1
+  };
+
+  testApi(formData);
+
 });
